@@ -1,0 +1,29 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.8
+    commands:
+      - echo Installing dependencies...
+      - pip install -r requirements.txt
+  pre_build:
+    commands:
+      - echo Pre-build phase completed!
+  build:
+    commands:
+      - echo Running tests with pytest...
+      - pytest --junitxml=test_results.xml --tb=short # Generate test results in JUnit XML format
+  post_build:
+    commands:
+      - echo Build completed successfully!
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: . # Adjust this if your build artifacts are in a different directory
+reports:
+  pytest_reports:
+    files:
+      - reports/test_results.xml
+    discard-paths: yes
