@@ -3,17 +3,22 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3.8
+      python: 3.9        # ← 3.8 → 3.9 minimum
     commands:
       - echo Installing dependencies...
+      - pip install --upgrade pip                    # ← upgrade pip
       - pip install -r requirements.txt
+
   pre_build:
     commands:
       - echo Pre-build phase completed!
+
   build:
     commands:
       - echo Running tests with pytest...
-      - pytest --junitxml=test_results.xml --tb=short # Generate test results in JUnit XML format
+      - mkdir -p reports                             # ← crée le dossier
+      - pytest --junitxml=reports/test_results.xml --tb=short  # ← bon chemin
+
   post_build:
     commands:
       - echo Build completed successfully!
@@ -21,9 +26,10 @@ phases:
 artifacts:
   files:
     - '**/*'
-  base-directory: . # Adjust this if your build artifacts are in a different directory
+  base-directory: .
+
 reports:
   pytest_reports:
     files:
-      - reports/test_results.xml
+      - reports/test_results.xml                    # ← cohérent avec build
     discard-paths: yes
